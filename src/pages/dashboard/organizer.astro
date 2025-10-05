@@ -1,0 +1,111 @@
+---
+import Layout from "../../components/Layout.astro";
+import { Construction, Calendar, Users, Trophy, Settings } from "@lucide/astro";
+---
+
+<Layout title="Organizar Torneos - UnmatchedTournaments">
+	<div class="container mx-auto px-4 py-12">
+		<div class="max-w-4xl mx-auto">
+			<!-- Header -->
+			<div class="text-center mb-12">
+				<div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 border-2 border-primary/20 mb-6">
+					<Construction class="h-12 w-12 text-primary" />
+				</div>
+				<h1 class="text-5xl font-bold mb-4">Panel de Organizador</h1>
+				<p class="text-xl text-muted-foreground">
+					Esta sección está en construcción
+				</p>
+			</div>
+
+			<!-- Mensaje principal -->
+			<div class="gradient-card border border-border rounded-lg p-8 mb-8 text-center">
+				<p class="text-lg text-muted-foreground mb-6">
+					Estamos trabajando en las herramientas para que puedas crear y gestionar tus propios torneos de Unmatched.
+				</p>
+				<p class="text-muted-foreground">
+					Pronto podrás acceder a todas estas funcionalidades:
+				</p>
+			</div>
+
+			<!-- Características próximamente -->
+			<div class="grid md:grid-cols-2 gap-6">
+				<div class="gradient-card border border-border rounded-lg p-6 hover-lift">
+					<div class="flex items-start gap-4">
+						<div class="p-3 rounded-lg bg-primary/10 border border-primary/20">
+							<Calendar class="h-6 w-6 text-primary" />
+						</div>
+						<div>
+							<h3 class="text-xl font-bold mb-2">Crear Torneos</h3>
+							<p class="text-muted-foreground text-sm">
+								Configura torneos presenciales u online con todos los detalles necesarios
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="gradient-card border border-border rounded-lg p-6 hover-lift">
+					<div class="flex items-start gap-4">
+						<div class="p-3 rounded-lg bg-primary/10 border border-primary/20">
+							<Users class="h-6 w-6 text-primary" />
+						</div>
+						<div>
+							<h3 class="text-xl font-bold mb-2">Gestión de Participantes</h3>
+							<p class="text-muted-foreground text-sm">
+								Administra inscripciones, listas de espera y confirmaciones
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="gradient-card border border-border rounded-lg p-6 hover-lift">
+					<div class="flex items-start gap-4">
+						<div class="p-3 rounded-lg bg-primary/10 border border-primary/20">
+							<Trophy class="h-6 w-6 text-primary" />
+						</div>
+						<div>
+							<h3 class="text-xl font-bold mb-2">Resultados y Rankings</h3>
+							<p class="text-muted-foreground text-sm">
+								Registra resultados y genera rankings automáticamente
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="gradient-card border border-border rounded-lg p-6 hover-lift">
+					<div class="flex items-start gap-4">
+						<div class="p-3 rounded-lg bg-primary/10 border border-primary/20">
+							<Settings class="h-6 w-6 text-primary" />
+						</div>
+						<div>
+							<h3 class="text-xl font-bold mb-2">Configuración Avanzada</h3>
+							<p class="text-muted-foreground text-sm">
+								Personaliza formatos, reglas y opciones de tu torneo
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- CTA -->
+			<div class="mt-12 text-center">
+				<p class="text-muted-foreground mb-6">
+					¿Quieres ser notificado cuando esta funcionalidad esté disponible?
+				</p>
+				<div class="flex gap-4 justify-center">
+					<a 
+						href="/" 
+						class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-background font-medium hover:brightness-110 transition-all duration-300 shadow-[0_0_15px_hsl(151_100%_50%/0.3)] hover:shadow-[0_0_35px_hsl(151_100%_50%/0.7)]"
+					>
+						Volver al Inicio
+					</a>
+					<a 
+						href="/tournaments" 
+						class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-border bg-card hover:bg-primary/10 hover:text-primary hover:border-primary transition-all duration-300"
+					>
+						Ver Torneos
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
