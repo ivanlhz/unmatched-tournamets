@@ -12,7 +12,7 @@ function formatDate(dateString: string) {
 }
 ---
 
-<Layout title="Noticias - UnmatchedTournaments">
+<Layout title="News - UnmatchedTournaments">
 	<div class="container mx-auto px-4 py-12">
 		<div class="max-w-4xl mx-auto">
 			<!-- Header -->
@@ -27,7 +27,7 @@ function formatDate(dateString: string) {
 			<div class="space-y-6">
 				{allNews.map((news) => (
 					<a 
-						href={`/noticias/${news.slug}`}
+						href={`/news/${news.slug}`}
 						class="block group"
 					>
 						<article class="gradient-card border border-border rounded-lg overflow-hidden hover-lift transition-all duration-300">

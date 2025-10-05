@@ -27,7 +27,7 @@ function formatDate(dateString: string) {
 		<div class="max-w-3xl mx-auto">
 			<!-- Botón volver -->
 			<a 
-				href="/noticias" 
+				href="/news" 
 				class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
 			>
 				<ChevronLeft class="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -83,7 +83,7 @@ function formatDate(dateString: string) {
 			<footer class="mt-12 pt-8 border-t border-border">
 				<div class="flex items-center justify-between">
 					<a 
-						href="/noticias" 
+						href="/news" 
 						class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
 					>
 						<ChevronLeft class="h-4 w-4" />
@@ -93,7 +93,6 @@ function formatDate(dateString: string) {
 					<!-- Compartir (opcional) -->
 					<div class="flex gap-2">
 						<span class="text-sm text-muted-foreground">Compartir:</span>
-						<!-- Aquí podrías añadir botones de redes sociales -->
 					</div>
 				</div>
 			</footer>
@@ -102,7 +101,6 @@ function formatDate(dateString: string) {
 </Layout>
 
 <style>
-	/* Estilos para el contenido del artículo */
 	.prose {
 		color: hsl(var(--color-foreground));
 	}

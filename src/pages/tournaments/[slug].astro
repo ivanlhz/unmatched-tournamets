@@ -1,0 +1,261 @@
+---
+import Layout from "../../components/Layout.astro";
+import { ChevronLeft, Calendar, Clock, MapPin, Globe, Users, Trophy, Award } from "@lucide/astro";
+import { allTournaments } from "../../data/tournaments";
+import { Button } from "../../components/ui/Button";
+
+export async function getStaticPaths() {
+	return allTournaments.map((tournament) => ({
+		params: { slug: tournament.slug },
+		props: { tournament }
+	}));
+}
+
+const { tournament } = Astro.props;
+
+function formatDate(dateString: string) {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('es-ES', { 
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric'
+	});
+}
+
+const isPast = tournament.status === "past";
+---
+
+<Layout title={`${tournament.title} - UnmatchedTournaments`}>
+	<article class="container mx-auto px-4 py-12">
+		<div class="max-w-4xl mx-auto">
+			<!-- Botón volver -->
+			<a 
+				href="/tournaments" 
+				class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
+			>
+				<ChevronLeft class="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+				<span>Volver a torneos</span>
+			</a>
+
+			<!-- Header del torneo -->
+			<header class="mb-8">
+				<!-- Badge de estado -->
+				{isPast ? (
+					<span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground mb-4">
+						Torneo Finalizado
+					</span>
+				) : (
+					<span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-4">
+						Próximamente
+					</span>
+				)}
+
+				<!-- Título -->
+				<h1 class="text-5xl font-bold mb-6">
+					{tournament.title}
+				</h1>
+
+				<!-- Descripción -->
+				<p class="text-xl text-muted-foreground mb-6">
+					{tournament.description}
+				</p>
+
+				<!-- Imagen destacada -->
+				<div class="rounded-lg overflow-hidden mb-8">
+					<img 
+						src={tournament.image} 
+						alt={tournament.title}
+						class={`w-full h-auto object-cover ${isPast ? 'grayscale' : ''}`}
+					/>
+				</div>
+
+				<!-- Info principal -->
+				<div class="grid md:grid-cols-2 gap-6 mb-8">
+					<div class="gradient-card p-6 rounded-lg border border-border">
+						<h3 class="text-sm font-medium text-muted-foreground mb-4">Información del Torneo</h3>
+						<div class="space-y-3">
+							<div class="flex items-center gap-3">
+								<Calendar class="h-5 w-5 text-primary" />
+								<div>
+									<p class="text-sm text-muted-foreground">Fecha</p>
+									<p class="font-medium">{formatDate(tournament.date)}</p>
+								</div>
+							</div>
+							
+							<div class="flex items-center gap-3">
+								<Clock class="h-5 w-5 text-primary" />
+								<div>
+									<p class="text-sm text-muted-foreground">Hora</p>
+									<p class="font-medium">{tournament.time}</p>
+								</div>
+							</div>
+
+							{tournament.type === 'presencial' && tournament.location ? (
+								<div class="flex items-center gap-3">
+									<MapPin class="h-5 w-5 text-primary" />
+									<div>
+										<p class="text-sm text-muted-foreground">Ubicación</p>
+										<p class="font-medium">{tournament.location.venue}</p>
+										<p class="text-sm text-muted-foreground">{tournament.location.city}</p>
+									</div>
+								</div>
+							) : (
+								<div class="flex items-center gap-3">
+									<Globe class="h-5 w-5 text-primary" />
+									<div>
+										<p class="text-sm text-muted-foreground">Modalidad</p>
+										<p class="font-medium">Torneo Online</p>
+									</div>
+								</div>
+							)}
+						</div>
+					</div>
+
+					<div class="gradient-card p-6 rounded-lg border border-border">
+						<h3 class="text-sm font-medium text-muted-foreground mb-4">Detalles de Participación</h3>
+						<div class="space-y-3">
+							<div class="flex items-center gap-3">
+								<Users class="h-5 w-5 text-primary" />
+								<div>
+									<p class="text-sm text-muted-foreground">Participantes</p>
+									<p class="font-medium">{tournament.participants}/{tournament.maxParticipants}</p>
+									{!isPast && (
+										<div class="mt-2 w-full bg-secondary rounded-full h-2">
+											<div 
+												class="bg-primary h-2 rounded-full transition-all" 
+												style={`width: ${(tournament.participants! / tournament.maxParticipants!) * 100}%`}
+											></div>
+										</div>
+									)}
+								</div>
+							</div>
+
+							{tournament.prize && (
+								<div class="flex items-center gap-3">
+									<Trophy class="h-5 w-5 text-primary" />
+									<div>
+										<p class="text-sm text-muted-foreground">Premio</p>
+										<p class="font-medium">{tournament.prize}</p>
+									</div>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+
+				<!-- Botón de acción -->
+				{!isPast && (
+					<div class="flex gap-4">
+						<Button client:load>
+							Inscribirse al Torneo
+						</Button>
+						<Button variant="outline" client:load>
+							Compartir
+						</Button>
+					</div>
+				)}
+			</header>
+
+			<!-- Contenido del torneo -->
+			<div class="prose prose-invert prose-lg max-w-none mb-12">
+				<h2>Formato del Torneo</h2>
+				<p>El torneo seguirá el formato suizo de 6 rondas, seguido de un top 8 de eliminación directa. Todas las partidas serán mejor de 3 juegos.</p>
+				
+				<h3>Reglas</h3>
+				<ul>
+					<li>Se utilizarán las reglas oficiales de Unmatched</li>
+					<li>Tiempo máximo por partida: 45 minutos</li>
+					<li>Todos los personajes oficiales están permitidos</li>
+					<li>No se permiten proxies ni cartas dañadas</li>
+				</ul>
+
+				<h3>Premios</h3>
+				<ul>
+					<li>1er lugar: {tournament.prize}</li>
+					<li>2do lugar: Productos oficiales</li>
+					<li>3er-4to lugar: Packs de cartas</li>
+				</ul>
+
+				{isPast && (
+					<>
+						<h2>Resultados</h2>
+						<div class="gradient-card p-6 rounded-lg border border-border not-prose">
+							<div class="space-y-4">
+								<div class="flex items-center gap-4">
+									<Award class="h-8 w-8 text-primary" />
+									<div>
+										<p class="text-sm text-muted-foreground">Campeón</p>
+										<p class="text-lg font-bold">Carlos Martínez</p>
+									</div>
+								</div>
+								<div class="flex items-center gap-4">
+									<Award class="h-6 w-6 text-muted-foreground" />
+									<div>
+										<p class="text-sm text-muted-foreground">Subcampeón</p>
+										<p class="font-medium">Ana García</p>
+									</div>
+								</div>
+								<div class="flex items-center gap-4">
+									<Award class="h-6 w-6 text-muted-foreground" />
+									<div>
+										<p class="text-sm text-muted-foreground">3er lugar</p>
+										<p class="font-medium">Luis Fernández</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</>
+				)}
+			</div>
+
+			<!-- Footer -->
+			<footer class="pt-8 border-t border-border">
+				<a 
+					href="/tournaments" 
+					class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+				>
+					<ChevronLeft class="h-4 w-4" />
+					<span>Ver todos los torneos</span>
+				</a>
+			</footer>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.prose {
+		color: hsl(var(--color-foreground));
+	}
+	
+	.prose h2 {
+		font-size: 2rem;
+		font-weight: 700;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		color: hsl(var(--color-foreground));
+	}
+	
+	.prose h3 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-top: 1.5rem;
+		margin-bottom: 0.75rem;
+		color: hsl(var(--color-primary));
+	}
+	
+	.prose p {
+		margin-bottom: 1.25rem;
+		line-height: 1.75;
+		color: hsl(var(--color-muted-foreground));
+	}
+	
+	.prose ul {
+		margin-bottom: 1.25rem;
+		padding-left: 1.5rem;
+		color: hsl(var(--color-muted-foreground));
+	}
+	
+	.prose li {
+		margin-bottom: 0.5rem;
+	}
+</style>

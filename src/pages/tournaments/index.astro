@@ -1,0 +1,218 @@
+---
+import Layout from "../../components/Layout.astro";
+import { getUpcomingTournaments, getPastTournaments } from "../../data/tournaments";
+import type { Tournament } from "../../data/tournaments";
+import { Calendar, Clock, MapPin, Globe, Users, Trophy } from "@lucide/astro";
+
+const upcomingTournaments = getUpcomingTournaments();
+const pastTournaments = getPastTournaments();
+
+// Agrupar torneos por mes
+function groupByMonth(tournaments: Tournament[]) {
+	const grouped = new Map<string, Tournament[]>();
+	
+	tournaments.forEach(tournament => {
+		const date = new Date(tournament.date);
+		const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+		
+		if (!grouped.has(monthKey)) {
+			grouped.set(monthKey, []);
+		}
+		grouped.get(monthKey)!.push(tournament);
+	});
+	
+	return Array.from(grouped.entries()).map(([key, tournaments]) => ({
+		monthKey: key,
+		monthName: new Date(tournaments[0].date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }),
+		tournaments
+	}));
+}
+
+const upcomingByMonth = groupByMonth(upcomingTournaments);
+const pastByMonth = groupByMonth(pastTournaments);
+---
+
+<Layout title="Tournaments - UnmatchedTournaments">
+	<div class="container mx-auto px-4 py-12">
+		<div class="max-w-6xl mx-auto">
+			<!-- Header -->
+			<div class="mb-12">
+				<h1 class="text-5xl font-bold mb-4">Torneos</h1>
+				<p class="text-xl text-muted-foreground">
+					Encuentra y participa en torneos de Unmatched
+				</p>
+			</div>
+
+			<!-- Próximos Torneos -->
+			<section class="mb-16">
+				<h2 class="text-3xl font-bold mb-6">Próximos Torneos</h2>
+				
+				{upcomingByMonth.map(({ monthName, tournaments }) => (
+					<div class="mb-12">
+						<h3 class="text-2xl font-bold mb-6 text-primary capitalize">{monthName}</h3>
+						<div class="space-y-4">
+							{tournaments.map((tournament) => (
+								<a 
+									href={`/tournaments/${tournament.slug}`}
+									class="block group"
+								>
+									<article class="gradient-card border border-border rounded-lg overflow-hidden hover-lift transition-all duration-300">
+										<div class="flex flex-col md:flex-row gap-0">
+											<!-- Fecha (Sidebar) -->
+											<div class="md:w-32 flex-shrink-0 bg-primary/10 border-r border-primary/20 p-6 flex flex-col items-center justify-center text-center">
+												<Calendar class="h-6 w-6 text-primary mb-2" />
+												<div class="text-4xl font-bold text-primary">
+													{new Date(tournament.date).getDate()}
+												</div>
+												<div class="text-sm text-muted-foreground uppercase">
+													{new Date(tournament.date).toLocaleDateString('es-ES', { month: 'short' })}
+												</div>
+											</div>
+
+											<!-- Contenido -->
+											<div class="flex-1 p-6">
+												<div class="flex items-start justify-between mb-4">
+													<div class="flex-1">
+														<h3 class="text-2xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+															{tournament.title}
+														</h3>
+														<p class="text-muted-foreground mb-4">
+															{tournament.description}
+														</p>
+													</div>
+													
+													<!-- Badge de tipo -->
+													<div class="ml-4">
+														{tournament.type === 'online' ? (
+															<span class="px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/40 text-sm font-medium flex items-center gap-2 whitespace-nowrap">
+																<Globe class="h-4 w-4" />
+																Online
+															</span>
+														) : (
+															<span class="px-3 py-1 rounded-full bg-secondary text-secondary-foreground border border-border text-sm font-medium flex items-center gap-2 whitespace-nowrap">
+																<MapPin class="h-4 w-4" />
+																Presencial
+															</span>
+														)}
+													</div>
+												</div>
+
+												<!-- Info -->
+												<div class="flex flex-wrap gap-6 text-sm text-muted-foreground">
+													<div class="flex items-center gap-2">
+														<Clock class="h-4 w-4 text-primary" />
+														<span>{tournament.time}</span>
+													</div>
+													
+													{tournament.type === 'presencial' && tournament.location && (
+														<div class="flex items-center gap-2">
+															<MapPin class="h-4 w-4 text-primary" />
+															<span>{tournament.location.venue}, {tournament.location.city}</span>
+														</div>
+													)}
+
+													<div class="flex items-center gap-2">
+														<Users class="h-4 w-4 text-primary" />
+														<span>{tournament.participants}/{tournament.maxParticipants}</span>
+													</div>
+
+													{tournament.prize && (
+														<div class="flex items-center gap-2">
+															<Trophy class="h-4 w-4 text-primary" />
+															<span>{tournament.prize}</span>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+									</article>
+								</a>
+							))}
+						</div>
+					</div>
+				))}
+			</section>
+
+			<!-- Torneos Pasados -->
+			<section>
+				<h2 class="text-3xl font-bold mb-6">Torneos Pasados</h2>
+				
+				{pastByMonth.map(({ monthName, tournaments }) => (
+					<div class="mb-8">
+						<h3 class="text-xl font-bold mb-4 text-muted-foreground capitalize">{monthName}</h3>
+						<div class="space-y-4">
+							{tournaments.map((tournament) => (
+								<a 
+									href={`/tournaments/${tournament.slug}`}
+									class="block group"
+								>
+									<article class="gradient-card border border-border rounded-lg overflow-hidden hover-lift transition-all duration-300 opacity-70 hover:opacity-100">
+										<div class="flex flex-col md:flex-row gap-6 p-6">
+											<!-- Imagen -->
+											<div class="md:w-48 h-32 md:h-auto flex-shrink-0 overflow-hidden rounded-lg">
+												<img 
+													src={tournament.image} 
+													alt={tournament.title}
+													class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0"
+												/>
+											</div>
+
+											<!-- Contenido -->
+											<div class="flex-1 flex flex-col justify-between">
+												<div>
+													<!-- Badge de finalizado -->
+													<span class="inline-block px-2 py-1 rounded text-xs font-medium bg-muted text-muted-foreground mb-3">
+														Finalizado
+													</span>
+
+													<!-- Título -->
+													<h3 class="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+														{tournament.title}
+													</h3>
+
+													<!-- Info compacta -->
+													<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+														<div class="flex items-center gap-2">
+															<Calendar class="h-4 w-4" />
+															<span>{new Date(tournament.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+														</div>
+														
+														{tournament.type === 'presencial' && tournament.location && (
+															<div class="flex items-center gap-2">
+																<MapPin class="h-4 w-4" />
+																<span>{tournament.location.city}</span>
+															</div>
+														)}
+
+														{tournament.type === 'online' && (
+															<div class="flex items-center gap-2">
+																<Globe class="h-4 w-4" />
+																<span>Online</span>
+															</div>
+														)}
+
+														<div class="flex items-center gap-2">
+															<Users class="h-4 w-4" />
+															<span>{tournament.participants} participantes</span>
+														</div>
+													</div>
+												</div>
+
+												<!-- Enlace -->
+												<div class="mt-4">
+													<span class="text-sm text-primary group-hover:underline">
+														Ver resultados →
+													</span>
+												</div>
+											</div>
+										</div>
+									</article>
+								</a>
+							))}
+						</div>
+					</div>
+				))}
+			</section>
+		</div>
+	</div>
+</Layout>
