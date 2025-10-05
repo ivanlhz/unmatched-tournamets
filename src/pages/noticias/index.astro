@@ -1,0 +1,83 @@
+---
+import Layout from "../../components/Layout.astro";
+import { allNews } from "../../data/news";
+
+function formatDate(dateString: string) {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('es-ES', { 
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric'
+	});
+}
+---
+
+<Layout title="Noticias - UnmatchedTournaments">
+	<div class="container mx-auto px-4 py-12">
+		<div class="max-w-4xl mx-auto">
+			<!-- Header -->
+			<div class="mb-12">
+				<h1 class="text-5xl font-bold mb-4">Noticias</h1>
+				<p class="text-xl text-muted-foreground">
+					Últimas noticias, análisis y guías sobre Unmatched
+				</p>
+			</div>
+
+			<!-- Lista de noticias -->
+			<div class="space-y-6">
+				{allNews.map((news) => (
+					<a 
+						href={`/noticias/${news.slug}`}
+						class="block group"
+					>
+						<article class="gradient-card border border-border rounded-lg overflow-hidden hover-lift transition-all duration-300">
+							<div class="flex flex-col md:flex-row gap-6 p-6">
+								<!-- Imagen -->
+								<div class="md:w-48 h-48 md:h-auto flex-shrink-0 overflow-hidden rounded-lg">
+									<img 
+										src={news.image} 
+										alt={news.title}
+										class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+									/>
+								</div>
+
+								<!-- Contenido -->
+								<div class="flex-1 flex flex-col justify-between">
+									<div>
+										<!-- Fecha y tiempo de lectura -->
+										<div class="flex items-center gap-3 text-sm text-muted-foreground mb-3">
+											<time datetime={news.date}>
+												{formatDate(news.date)}
+											</time>
+											<span>·</span>
+											<span>{news.readTime} de lectura</span>
+										</div>
+
+										<!-- Título -->
+										<h2 class="text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+											{news.title}
+										</h2>
+
+										<!-- Descripción -->
+										<p class="text-muted-foreground mb-4">
+											{news.description}
+										</p>
+									</div>
+
+									<!-- Tags -->
+									<div class="flex flex-wrap gap-2">
+										{news.tags.map((tag) => (
+											<span class="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+												{tag}
+											</span>
+										))}
+									</div>
+								</div>
+							</div>
+						</article>
+					</a>
+				))}
+			</div>
+		</div>
+	</div>
+</Layout>

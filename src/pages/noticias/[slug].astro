@@ -1,0 +1,156 @@
+---
+import Layout from "../../components/Layout.astro";
+import { ChevronLeft } from "@lucide/astro";
+import { allNews } from "../../data/news";
+
+export async function getStaticPaths() {
+	return allNews.map((news) => ({
+		params: { slug: news.slug },
+		props: { news }
+	}));
+}
+
+const { news } = Astro.props;
+
+function formatDate(dateString: string) {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('es-ES', { 
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric'
+	});
+}
+---
+
+<Layout title={`${news.title} - UnmatchedTournaments`}>
+	<article class="container mx-auto px-4 py-12">
+		<div class="max-w-3xl mx-auto">
+			<!-- Botón volver -->
+			<a 
+				href="/noticias" 
+				class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
+			>
+				<ChevronLeft class="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+				<span>Volver a noticias</span>
+			</a>
+
+			<!-- Header del artículo -->
+			<header class="mb-8">
+				<!-- Fecha y tiempo de lectura -->
+				<div class="flex items-center gap-3 text-sm text-muted-foreground mb-4">
+					<time datetime={news.date}>
+						{formatDate(news.date)}
+					</time>
+					<span>·</span>
+					<span>{news.readTime} de lectura</span>
+				</div>
+
+				<!-- Título -->
+				<h1 class="text-5xl font-bold mb-6">
+					{news.title}
+				</h1>
+
+				<!-- Descripción -->
+				<p class="text-xl text-muted-foreground mb-6">
+					{news.description}
+				</p>
+
+				<!-- Tags -->
+				<div class="flex flex-wrap gap-2 mb-8">
+					{news.tags.map((tag) => (
+						<span class="text-sm px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+							{tag}
+						</span>
+					))}
+				</div>
+
+				<!-- Imagen destacada -->
+				<div class="rounded-lg overflow-hidden mb-8">
+					<img 
+						src={news.image} 
+						alt={news.title}
+						class="w-full h-auto object-cover"
+					/>
+				</div>
+			</header>
+
+			<!-- Contenido del artículo -->
+			<div class="prose prose-invert prose-lg max-w-none">
+				<div set:html={news.content} />
+			</div>
+
+			<!-- Footer del artículo -->
+			<footer class="mt-12 pt-8 border-t border-border">
+				<div class="flex items-center justify-between">
+					<a 
+						href="/noticias" 
+						class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+					>
+						<ChevronLeft class="h-4 w-4" />
+						<span>Ver todas las noticias</span>
+					</a>
+
+					<!-- Compartir (opcional) -->
+					<div class="flex gap-2">
+						<span class="text-sm text-muted-foreground">Compartir:</span>
+						<!-- Aquí podrías añadir botones de redes sociales -->
+					</div>
+				</div>
+			</footer>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	/* Estilos para el contenido del artículo */
+	.prose {
+		color: hsl(var(--color-foreground));
+	}
+	
+	.prose h2 {
+		font-size: 2rem;
+		font-weight: 700;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		color: hsl(var(--color-foreground));
+	}
+	
+	.prose h3 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-top: 1.5rem;
+		margin-bottom: 0.75rem;
+		color: hsl(var(--color-primary));
+	}
+	
+	.prose p {
+		margin-bottom: 1.25rem;
+		line-height: 1.75;
+		color: hsl(var(--color-muted-foreground));
+	}
+	
+	.prose ul, .prose ol {
+		margin-bottom: 1.25rem;
+		padding-left: 1.5rem;
+		color: hsl(var(--color-muted-foreground));
+	}
+	
+	.prose li {
+		margin-bottom: 0.5rem;
+	}
+	
+	.prose strong {
+		color: hsl(var(--color-foreground));
+		font-weight: 600;
+	}
+	
+	.prose a {
+		color: hsl(var(--color-primary));
+		text-decoration: underline;
+		transition: opacity 0.2s;
+	}
+	
+	.prose a:hover {
+		opacity: 0.8;
+	}
+</style>
