@@ -1,0 +1,76 @@
+---
+interface Props {
+	title: string;
+	date: string;
+	time: string;
+	type: "presencial" | "online";
+	location?: {
+		venue: string;
+		city: string;
+	};
+	image: string;
+}
+
+const { title, date, time, type, location, image } = Astro.props;
+
+function formatDate(dateString: string) {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('es-ES', { 
+		day: 'numeric', 
+		month: 'short',
+		year: 'numeric'
+	});
+}
+---
+
+<div class="group relative bg-card border border-border rounded-lg overflow-hidden hover-lift flex h-40 min-w-[320px] max-w-[400px]">
+	<!-- Imagen diagonal a la izquierda -->
+	<div class="relative w-32 flex-shrink-0 overflow-hidden">
+		<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
+		<img 
+			src={image} 
+			alt={title}
+			class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+			style="clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);"
+		/>
+	</div>
+
+	<!-- Contenido -->
+	<div class="flex-1 p-4 flex flex-col justify-between">
+		<div>
+			<h3 class="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+				{title}
+			</h3>
+			
+			<div class="space-y-1 text-xs text-muted-foreground">
+				<div class="flex items-center gap-2">
+					<span class="text-primary">📅</span>
+					<span>{formatDate(date)} • {time}</span>
+				</div>
+				
+				<div class="flex items-center gap-2">
+					{type === 'presencial' ? (
+						<>
+							<span class="text-primary">📍</span>
+							<span class="truncate">{location?.city}</span>
+						</>
+					) : (
+						<>
+							<span class="text-primary">🌐</span>
+							<span>Online</span>
+						</>
+					)}
+				</div>
+			</div>
+		</div>
+
+		<div class="flex items-center justify-between mt-2">
+			<span class={`text-xs px-2 py-1 rounded ${type === 'online' ? 'bg-primary/10 text-primary' : 'bg-secondary text-secondary-foreground'}`}>
+				{type === 'online' ? 'Online' : 'Presencial'}
+			</span>
+			<a href="#" class="text-xs text-primary hover:underline font-medium">
+				Ver más →
+			</a>
+		</div>
+	</div>
+</div>

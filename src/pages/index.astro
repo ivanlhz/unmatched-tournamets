@@ -3,6 +3,7 @@ import Layout from "../components/Layout.astro";
 import { Button } from "../components/ui/Button";
 import TournamentList from "../components/TournamentList.astro";
 import NewsGrid from "../components/NewsGrid.astro";
+import { TournamentSlider } from "../components/TournamentSlider";
 
 // Datos de noticias
 const news = [
@@ -79,14 +80,113 @@ const upcomingTournaments = [
 		}
 	}
 ];
+
+// Datos para el slider de torneos (con imágenes)
+const allTournaments = [
+	{
+		id: "1",
+		title: "Torneo Primavera Madrid",
+		date: "2025-03-15",
+		time: "10:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Centro Cívico Delicias",
+			city: "Madrid"
+		},
+		image: "/hero-news-1.jpg"
+	},
+	{
+		id: "2",
+		title: "Copa Online Internacional",
+		date: "2025-03-20",
+		time: "18:00",
+		type: "online" as const,
+		image: "/hero-news-2.jpg"
+	},
+	{
+		id: "3",
+		title: "Torneo Barcelona Open",
+		date: "2025-03-25",
+		time: "11:30",
+		type: "presencial" as const,
+		location: {
+			venue: "Librería Gigamesh",
+			city: "Barcelona"
+		},
+		image: "/hero-news-3.jpg"
+	},
+	{
+		id: "4",
+		title: "Liga Online Europea",
+		date: "2025-04-01",
+		time: "20:00",
+		type: "online" as const,
+		image: "/hero-news-1.jpg"
+	},
+	{
+		id: "5",
+		title: "Campeonato Valencia",
+		date: "2025-04-08",
+		time: "10:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Tienda Freaks",
+			city: "Valencia"
+		},
+		image: "/hero-news-2.jpg"
+	},
+	{
+		id: "6",
+		title: "Torneo Sevilla Masters",
+		date: "2025-04-15",
+		time: "11:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Club de Juegos Sevilla",
+			city: "Sevilla"
+		},
+		image: "/hero-news-3.jpg"
+	},
+	{
+		id: "7",
+		title: "Torneo Online Nocturno",
+		date: "2025-04-20",
+		time: "21:00",
+		type: "online" as const,
+		image: "/hero-news-1.jpg"
+	},
+	{
+		id: "8",
+		title: "Campeonato Madrid Pro",
+		date: "2025-04-25",
+		time: "10:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Arena Games Madrid",
+			city: "Madrid"
+		},
+		image: "/hero-news-2.jpg"
+	}
+];
 ---
 
 <Layout title="UnmatchedTournaments - Inicio">
-	<div class="container mx-auto px-4 py-12">
+	<div class="container mx-auto px-4 py-12 space-y-16">
 		<div class="grid lg:grid-cols-[1fr_400px] gap-8">
 			<NewsGrid news={news} />
 			
 			<TournamentList tournaments={upcomingTournaments} />
+		</div>
+
+		<!-- Slider de Torneos -->
+		<div class="space-y-6">
+			<div class="flex items-center justify-between">
+				<h2 class="text-3xl font-bold">Todos los Torneos</h2>
+				<a href="/torneos" class="text-primary hover:text-primary/80 transition-colors text-sm font-medium">
+					Ver todos →
+				</a>
+			</div>
+			<TournamentSlider tournaments={allTournaments} client:load />
 		</div>
 	</div>
 </Layout>
