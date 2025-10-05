@@ -1,0 +1,41 @@
+---
+import { Menu, User, Trophy } from "@lucide/astro";
+import Link from "./ui/Link.astro";
+import { Button } from "./ui/Button";
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+  <div class="container mx-auto px-4">
+    <div class="flex h-16 items-center justify-between">
+      <a href="/" class="flex items-center gap-2 transition-all duration-300 hover:scale-105 group">
+        <span class="text-xl font-bold">
+          <span class="text-primary group-hover:drop-shadow-[0_0_8px_hsl(151_100%_50%/0.8)] transition-all duration-300">U</span>nmatched<span class="text-primary group-hover:drop-shadow-[0_0_8px_hsl(151_100%_50%/0.8)] transition-all duration-300">T</span>ournaments
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <Link to="/" class="text-sm font-medium">
+          Torneos
+        </Link>
+        <Link to="/noticias" class="text-sm font-medium">
+          Noticias
+        </Link>
+        <Link to="/dashboard/organizer" class="text-sm font-medium">
+          Organizar
+        </Link>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <Button variant="ghost" size="icon" className="hidden md:inline-flex" client:load>
+          <User class="h-5 w-5" />
+        </Button>
+        <Button className="md:inline-flex" client:load>
+          Acceder
+        </Button>
+        <Button variant="ghost" size="icon" className="md:hidden" client:load>
+          <Menu class="h-5 w-5" />
+        </Button>
+      </div>
+    </div>
+  </div>
+</header>

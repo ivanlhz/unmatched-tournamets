@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@theme {
+  --color-background: 240 15% 4%;
+  --color-foreground: 0 0% 100%;
+
+  --color-card: 225 10% 12%;
+  --color-card-foreground: 0 0% 100%;
+  
+  --color-card-secondary: 215 7% 18%;
+
+  --color-popover: 225 10% 12%;
+  --color-popover-foreground: 0 0% 100%;
+
+  --color-primary: 151 100% 50%;
+  --color-primary-foreground: 0 0% 0%;
+  --color-primary-glow: 151 100% 65%;
+
+  --color-secondary: 215 7% 18%;
+  --color-secondary-foreground: 0 0% 100%;
+
+  --color-muted: 215 7% 25%;
+  --color-muted-foreground: 0 0% 65%;
+
+  --color-accent: 151 100% 50%;
+  --color-accent-foreground: 240 15% 4%;
+
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 100%;
+
+  --color-border: 215 10% 20%;
+  --color-input: 215 10% 20%;
+  --color-ring: 151 100% 50%;
+
+  --radius: 0.75rem;
+}
+
+/* Tailwind CSS utilities */
+@layer utilities {
+  .bg-primary {
+    background-color: hsl(var(--color-primary));
+  }
+  .text-primary {
+    color: hsl(var(--color-primary));
+  }
+  .text-primary-foreground {
+    color: hsl(var(--color-primary-foreground));
+  }
+  .bg-background {
+    background-color: hsl(var(--color-background));
+  }
+  .text-foreground {
+    color: hsl(var(--color-foreground));
+  }
+  .bg-card {
+    background-color: hsl(var(--color-card));
+  }
+  .text-muted-foreground {
+    color: hsl(var(--color-muted-foreground));
+  }
+  .border-border {
+    border-color: hsl(var(--color-border));
+  }
+}
+
+/* Base styles */
+* {
+  border-color: hsl(var(--color-border));
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+/* Custom utilities */
+.gradient-overlay {
+  background: linear-gradient(to top, hsl(240 15% 4% / 0.95), hsl(240 15% 4% / 0.3));
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, hsl(225 10% 12%), hsl(215 7% 18%));
+}
+
+.shadow-card {
+  box-shadow: 0 4px 20px hsl(240 15% 0% / 0.4);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 8px 30px hsl(240 15% 0% / 0.6), 0 0 20px hsl(151 100% 50% / 0.15);
+}
+
+.shadow-primary {
+  box-shadow: 0 0 20px hsl(151 100% 50% / 0.4);
+}
+
+.hover-lift {
+  transition: all 300ms ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-0.25rem);
+  box-shadow: 0 8px 30px hsl(240 15% 0% / 0.6), 0 0 20px hsl(151 100% 50% / 0.15);
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
