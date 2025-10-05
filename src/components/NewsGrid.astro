@@ -1,0 +1,29 @@
+---
+import NewsCard from "./NewsCard.astro";
+
+interface News {
+	id: string;
+	title: string;
+	description: string;
+	image: string;
+	link: string;
+}
+
+interface Props {
+	news: News[];
+}
+
+const { news } = Astro.props;
+---
+
+<div class="grid grid-cols-2 grid-rows-2 h-auto">
+	{news.map((item, index) => (
+		<NewsCard 
+			title={item.title}
+			description={item.description}
+			image={item.image}
+			link={item.link}
+			featured={index === 0}
+		/>
+	))}
+</div>

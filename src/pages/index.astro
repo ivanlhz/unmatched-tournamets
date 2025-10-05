@@ -2,6 +2,32 @@
 import Layout from "../components/Layout.astro";
 import { Button } from "../components/ui/Button";
 import TournamentList from "../components/TournamentList.astro";
+import NewsGrid from "../components/NewsGrid.astro";
+
+// Datos de noticias
+const news = [
+	{
+		id: "1",
+		title: "Nuevo Torneo Nacional Anunciado",
+		description: "Se ha anunciado el mayor torneo de Unmatched del año con premios increíbles",
+		image: "/hero-news-1.jpg",
+		link: "/noticias/torneo-nacional-2025"
+	},
+	{
+		id: "2",
+		title: "Actualización de Reglas",
+		description: "Nuevas reglas oficiales para torneos competitivos",
+		image: "/hero-news-2.jpg",
+		link: "/noticias/actualizacion-reglas"
+	},
+	{
+		id: "3",
+		title: "Entrevista con el Campeón",
+		description: "Hablamos con el ganador del último campeonato",
+		image: "/hero-news-3.jpg",
+		link: "/noticias/entrevista-campeon"
+	}
+];
 
 // Datos de ejemplo de torneos
 const upcomingTournaments = [
@@ -58,30 +84,8 @@ const upcomingTournaments = [
 <Layout title="UnmatchedTournaments - Inicio">
 	<div class="container mx-auto px-4 py-12">
 		<div class="grid lg:grid-cols-[1fr_400px] gap-8">
-			<!-- Contenido Principal (Izquierda) -->
-			<div class="space-y-8">
-				<!-- Hero Section -->
-				<div class="space-y-4">
-					<h1 class="text-5xl font-bold">
-						Bienvenido a <span class="text-primary">UnmatchedTournaments</span>
-					</h1>
-					<p class="text-xl text-muted-foreground">
-						La plataforma para organizar y participar en torneos de Unmatched
-					</p>
-				</div>
-
-				<!-- Sección de CTAs -->
-				<div class="flex gap-4 flex-wrap">
-					<Button client:load>
-						Explorar Torneos
-					</Button>
-					<Button variant="outline" client:load>
-						Crear Torneo
-					</Button>
-				</div>
-			</div>
-
-			<!-- Lista de Próximos Torneos (Derecha) -->
+			<NewsGrid news={news} />
+			
 			<TournamentList tournaments={upcomingTournaments} />
 		</div>
 	</div>
