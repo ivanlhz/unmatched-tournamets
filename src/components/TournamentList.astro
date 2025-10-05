@@ -28,6 +28,7 @@ const { tournaments } = Astro.props;
 
 		<div class="space-y-3">
 			{tournaments.map((tournament) => (
+			<a href={`/tournaments/${tournament.id}`} class="block">
 				<div class="gradient-card p-4 rounded-lg hover-lift border border-border transition-all duration-300 cursor-pointer">
 					<!-- Fecha y Hora -->
 					<div class="flex items-start gap-3 mb-3">
@@ -73,11 +74,12 @@ const { tournaments } = Astro.props;
 						</div>
 					</div>
 				</div>
-			))}
+			</a>
+		))}
 		</div>
 
 		<a 
-			href="/torneos" 
+			href="/tournaments" 
 			class="block mt-4 text-center text-primary hover:text-primary/80 transition-colors text-sm font-medium py-2 border border-border rounded-lg hover:border-primary/50 hover:bg-primary/5"
 		>
 			Ver todos los torneos →

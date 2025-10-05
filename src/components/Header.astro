@@ -1,7 +1,8 @@
 ---
-import { Menu, User, Trophy } from "@lucide/astro";
+import { User } from "@lucide/astro";
 import Link from "./ui/Link.astro";
 import { Button } from "./ui/Button";
+import { MobileMenu } from "./MobileMenu";
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -25,16 +26,14 @@ import { Button } from "./ui/Button";
         </Link>
       </nav>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 ml-auto">
         <Button variant="ghost" size="icon" className="hidden md:inline-flex" client:load>
           <User class="h-5 w-5" />
         </Button>
-        <Button className="md:inline-flex" client:load>
+        <Button className="hidden sm:inline-flex" client:load>
           Acceder
         </Button>
-        <Button variant="ghost" size="icon" className="md:hidden" client:load>
-          <Menu class="h-5 w-5" />
-        </Button>
+        <MobileMenu client:load />
       </div>
     </div>
   </div>

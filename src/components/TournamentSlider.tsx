@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Carousel } from '@ark-ui/react/carousel';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -22,6 +22,28 @@ interface Props {
 export const TournamentSlider = ({ tournaments }: Props) => {
 	const [filter, setFilter] = useState<'all' | 'online' | 'presencial'>('all');
 	const [locationFilter, setLocationFilter] = useState<string>('all');
+	const [slidesPerPage, setSlidesPerPage] = useState(1);
+
+	// Detectar tamaño de pantalla
+	useEffect(() => {
+		const updateSlidesPerPage = () => {
+			if (window.innerWidth >= 1024) {
+				setSlidesPerPage(3);
+			} else if (window.innerWidth >= 768) {
+				setSlidesPerPage(2);
+			} else {
+				setSlidesPerPage(1);
+			}
+		};
+
+		// Ejecutar al montar
+		updateSlidesPerPage();
+
+		// Escuchar cambios de tamaño
+		window.addEventListener('resize', updateSlidesPerPage);
+		return () => window.removeEventListener('resize', updateSlidesPerPage);
+	}, []);
+
 
 	// Obtener ciudades únicas
 	const cities = ['all', ...new Set(
@@ -101,7 +123,7 @@ export const TournamentSlider = ({ tournaments }: Props) => {
 			{/* Carousel de Ark UI */}
 			<Carousel.Root 
 				slideCount={filteredTournaments.length}
-				slidesPerPage={3}
+				slidesPerPage={slidesPerPage}
 				spacing="8px"
 				allowMouseDrag
 				className="relative"
@@ -118,9 +140,9 @@ export const TournamentSlider = ({ tournaments }: Props) => {
 				<Carousel.ItemGroup className="flex gap-2">
 					{filteredTournaments.map((tournament, index) => (
 						<Carousel.Item key={tournament.id} index={index} className="flex-shrink-0">
-							<div className="group relative bg-card border border-border rounded-lg overflow-hidden hover-lift flex h-40 w-full">
+							<div className="group relative bg-card border border-border rounded-lg overflow-hidden hover-lift flex flex-col sm:flex-row h-auto sm:h-40 w-full min-w-[280px]">
 								{/* Imagen diagonal a la izquierda */}
-								<div className="relative w-32 flex-shrink-0 overflow-hidden">
+								<div className="relative w-full h-32 sm:w-32 sm:h-auto flex-shrink-0 overflow-hidden">
 									<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
 									<img 
 										src={tournament.image} 
@@ -131,13 +153,13 @@ export const TournamentSlider = ({ tournaments }: Props) => {
 								</div>
 
 								{/* Contenido */}
-								<div className="flex-1 p-4 flex flex-col justify-between">
+								<div className="flex-1 p-3 sm:p-4 flex flex-col justify-between">
 									<div>
-										<h3 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+										<h3 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2 text-sm sm:text-base">
 											{tournament.title}
 										</h3>
 										
-										<div className="space-y-1 text-xs text-muted-foreground">
+										<div className="space-y-1 text-xs text-muted-foreground hidden sm:block">
 											<div className="flex items-center gap-2">
 												<span className="text-primary">📅</span>
 												<span>{formatDate(tournament.date)} • {tournament.time}</span>
