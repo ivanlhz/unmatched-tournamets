@@ -1,19 +1,88 @@
 ---
 import Layout from "../components/Layout.astro";
 import { Button } from "../components/ui/Button";
+import TournamentList from "../components/TournamentList.astro";
+
+// Datos de ejemplo de torneos
+const upcomingTournaments = [
+	{
+		id: "1",
+		title: "Torneo Primavera Madrid",
+		date: "2025-03-15",
+		time: "10:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Centro Cívico Delicias",
+			city: "Madrid"
+		}
+	},
+	{
+		id: "2",
+		title: "Copa Online Internacional",
+		date: "2025-03-20",
+		time: "18:00",
+		type: "online" as const
+	},
+	{
+		id: "3",
+		title: "Torneo Barcelona Open",
+		date: "2025-03-25",
+		time: "11:30",
+		type: "presencial" as const,
+		location: {
+			venue: "Librería Gigamesh",
+			city: "Barcelona"
+		}
+	},
+	{
+		id: "4",
+		title: "Liga Online Europea",
+		date: "2025-04-01",
+		time: "20:00",
+		type: "online" as const
+	},
+	{
+		id: "5",
+		title: "Campeonato Valencia",
+		date: "2025-04-08",
+		time: "10:00",
+		type: "presencial" as const,
+		location: {
+			venue: "Tienda Freaks",
+			city: "Valencia"
+		}
+	}
+];
 ---
 
 <Layout title="UnmatchedTournaments - Inicio">
 	<div class="container mx-auto px-4 py-12">
-		<div class="max-w-4xl mx-auto text-center space-y-8">
-			<h1 class="text-5xl font-bold">
-				Bienvenido a <span class="text-primary">UnmatchedTournaments</span>
-			</h1>
-			<p class="text-xl text-muted-foreground">
-				La plataforma para organizar y participar en torneos de Unmatched
-			</p>
-			
+		<div class="grid lg:grid-cols-[1fr_400px] gap-8">
+			<!-- Contenido Principal (Izquierda) -->
+			<div class="space-y-8">
+				<!-- Hero Section -->
+				<div class="space-y-4">
+					<h1 class="text-5xl font-bold">
+						Bienvenido a <span class="text-primary">UnmatchedTournaments</span>
+					</h1>
+					<p class="text-xl text-muted-foreground">
+						La plataforma para organizar y participar en torneos de Unmatched
+					</p>
+				</div>
 
+				<!-- Sección de CTAs -->
+				<div class="flex gap-4 flex-wrap">
+					<Button client:load>
+						Explorar Torneos
+					</Button>
+					<Button variant="outline" client:load>
+						Crear Torneo
+					</Button>
+				</div>
+			</div>
+
+			<!-- Lista de Próximos Torneos (Derecha) -->
+			<TournamentList tournaments={upcomingTournaments} />
 		</div>
 	</div>
 </Layout>

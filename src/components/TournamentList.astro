@@ -1,0 +1,86 @@
+---
+import { Calendar, Clock, MapPin, Globe } from "@lucide/astro";
+
+interface Tournament {
+	id: string;
+	title: string;
+	date: string;
+	time: string;
+	type: "presencial" | "online";
+	location?: {
+		venue: string;
+		city: string;
+	};
+}
+
+interface Props {
+	tournaments: Tournament[];
+}
+
+const { tournaments } = Astro.props;
+---
+
+<aside class="space-y-6">
+	<div class="sticky top-20">
+		<div class="flex items-center justify-between mb-4">
+			<h2 class="text-2xl font-bold">Próximos Torneos</h2>
+		</div>
+
+		<div class="space-y-3">
+			{tournaments.map((tournament) => (
+				<div class="gradient-card p-4 rounded-lg hover-lift border border-border transition-all duration-300 cursor-pointer">
+					<!-- Fecha y Hora -->
+					<div class="flex items-start gap-3 mb-3">
+						<div class="bg-primary/10 border border-primary/20 rounded-lg p-2 flex-shrink-0">
+							<div class="flex flex-col items-center">
+								<Calendar class="h-4 w-4 text-primary mb-1" />
+								<span class="text-xs font-semibold text-primary">
+									{new Date(tournament.date).getDate()}
+								</span>
+								<span class="text-xs text-muted-foreground">
+									{new Date(tournament.date).toLocaleDateString('es-ES', { month: 'short' })}
+								</span>
+							</div>
+						</div>
+						
+						<div class="flex-1 min-w-0">
+							<h3 class="font-bold text-foreground hover:text-primary transition-colors line-clamp-2 mb-2">
+								{tournament.title}
+							</h3>
+							
+							<div class="space-y-1">
+								<div class="flex items-center gap-2 text-muted-foreground text-xs">
+									<Clock class="h-3 w-3" />
+									<span>{tournament.time}</span>
+								</div>
+								
+								<div class="flex items-center gap-2 text-muted-foreground text-xs">
+									{tournament.type === 'presencial' ? (
+										<>
+											<MapPin class="h-3 w-3 text-primary flex-shrink-0" />
+											<span class="truncate">
+												{tournament.location?.city}
+											</span>
+										</>
+									) : (
+										<>
+											<Globe class="h-3 w-3 text-primary" />
+											<span>Online</span>
+										</>
+									)}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+
+		<a 
+			href="/torneos" 
+			class="block mt-4 text-center text-primary hover:text-primary/80 transition-colors text-sm font-medium py-2 border border-border rounded-lg hover:border-primary/50 hover:bg-primary/5"
+		>
+			Ver todos los torneos →
+		</a>
+	</div>
+</aside>
